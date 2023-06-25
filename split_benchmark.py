@@ -6,18 +6,9 @@
 import random
 import time
 
-SPACE = ' '
+SPACE = " "
 NEWLINE = "\n"
 EMPTY = ""
-
-
-class ResultError(Exception):
-
-    def __init__(self, *results):
-        self.results = results
-
-    def __str__(self):
-        return f"Результаты не совпали: {NEWLINE.join(f'{index}: {res}' for index, res in enumerate(self.results))}"
 
 
 def timer(func):
@@ -26,12 +17,6 @@ def timer(func):
         func(test)
         log(f"Время исполнения: {time.time() - start_time} секунд.")
     return timed_func
-
-
-def make_test(size, alphabet, spaces=True):
-    if spaces:
-        alphabet.append(SPACE)
-    return str([random.choice(alphabet) for _ in range(size)])
 
 
 @timer
@@ -62,6 +47,21 @@ def checker(first, second):
     log("Тест успешно пройдён")
 
 
+class ResultError(Exception):
+
+    def __init__(self, *results):
+        self.results = results
+
+    def __str__(self):
+        return f"Результаты не совпали: {NEWLINE.join(f'{index}: {res}' for index, res in enumerate(self.results))}"
+
+
+def make_test(size, alphabet, spaces=True):
+    if spaces:
+        alphabet.append(SPACE)
+    return str([random.choice(alphabet) for _ in range(size)])
+
+
 def log(message, error=False):
     if error:
         print("Ошибка, подробнее:", message)
@@ -71,7 +71,7 @@ def log(message, error=False):
 
 if __name__ == '__main__':
 
-    # 10^5 длина теста, алфавит (он ни на что не влияет, чисто для усложнения реализации) из одной буквы
+    # 10 ^ 5 длина теста, алфавит (он ни на что не влияет, чисто для усложнения реализации) из одной буквы
     test_size = 10 ** 5
     test_alphabet = ['a']
     current = make_test(test_size, test_alphabet)
@@ -79,3 +79,10 @@ if __name__ == '__main__':
         checker(split(current), my_split(current))
     except ResultError as e:
         log(e, error=True)
+    
+    """
+        Вывод:
+            Время исполнения: 0.005604743957519531 секунд.
+            Время исполнения: 1.2181675434112549 секунд.
+            Тест успешно пройдён
+    """
