@@ -14,8 +14,9 @@ EMPTY = ""
 def timer(func):
     def timed_func(test):
         start_time = time.time()
-        func(test)
+        res = func(test)
         log(f"Время исполнения: {time.time() - start_time} секунд.")
+        return res
     return timed_func
 
 
@@ -35,7 +36,7 @@ def my_split(test):
                 result += c
         else:
             if result and result[-1] != EMPTY:
-                result += EMPTY
+                result += [EMPTY]
     if result[-1] == EMPTY:
         result.pop()
     return result
@@ -53,18 +54,18 @@ class ResultError(Exception):
         self.results = results
 
     def __str__(self):
-        return f"Результаты не совпали: {NEWLINE.join(f'{index}: {res}' for index, res in enumerate(self.results))}"
+        return f"Результаты не совпали:\n{NEWLINE.join(f'{index}: {res}' for index, res in enumerate(self.results))}"
 
 
 def make_test(size, alphabet, spaces=True):
     if spaces:
         alphabet.append(SPACE)
-    return str([random.choice(alphabet) for _ in range(size)])
+    return EMPTY.join([random.choice(alphabet) for _ in range(size)])
 
 
 def log(message, error=False):
     if error:
-        print("Ошибка, подробнее:", message)
+        print(f"Ошибка, подробнее:\n{message}")
     else:
         print(message)
 
@@ -82,7 +83,7 @@ if __name__ == '__main__':
     
     """
         Вывод:
-            Время исполнения: 0.005604743957519531 секунд.
-            Время исполнения: 1.2181675434112549 секунд.
+            Время исполнения: 0.0008034706115722656 секунд.
+            Время исполнения: 0.007983684539794922 секунд.
             Тест успешно пройдён
     """
